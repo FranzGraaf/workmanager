@@ -3,16 +3,36 @@ import time
 from flask import Flask, request, jsonify, session, Response, stream_with_context
 from flask_cors import CORS
 import json
+from DB_Interactions.db_init import DB_Init
+import firebase_admin
+from firebase_admin import credentials, firestore, storage
 
 
 
+
+def increment_counter(db):
+    doc_ref = db.collection(u"Test").document(u"TD_1")
+    try:
+        old_count = doc_ref.get().to_dict()[u"Testcounter"]
+        doc_ref.update({
+            u"Testcounter": old_count+1,
+        })
+    except Exception as e:
+        doc_ref.set({
+            u"Testcounter": 1,
+        })
 
 
 
 if __name__ == "__main__":
     app = Flask(__name__)
     CORS(app, supports_credentials=True) # used to test the application locally in connection with a web browser
+    db_init = DB_Init()
+    db = firestore.client()
+    bucket = db_init.get_bucket()
 
+
+    increment_counter(db)
 
 
     @app.route('/addieren', methods=["GET", "POST"])
@@ -29,5 +49,5 @@ if __name__ == "__main__":
 
 
 
-    app.run() # for development
+    #app.run() # for development
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production
