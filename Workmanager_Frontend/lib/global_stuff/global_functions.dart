@@ -1,4 +1,5 @@
 import 'package:Workmanager_Frontend/global_stuff/DB_User.dart';
+import 'package:Workmanager_Frontend/global_stuff/KEYS.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,7 @@ Future<String> refresh_id_token() async {
   if (cookie.get("refresh_token") != null) {
     String _refresh_token = cookie.get("refresh_token");
     String url =
-        "https://securetoken.googleapis.com/v1/token?key=AIzaSyCug8ur2eRc26os3ET7suJ3fIGh6dTywa0";
+        "https://securetoken.googleapis.com/v1/token?key=" + FIREBASE_API_KEY;
     Map<String, dynamic> data = {
       "grant_type": "refresh_token",
       "refresh_token": _refresh_token
