@@ -21,4 +21,14 @@ class Backend_Com {
         (await Backend_Com().postdata(url, jsonEncode(data)))["summe"];
     return _response;
   }
+
+  //TODO: Create DB entry for a new user when registered
+  //TODO: get complete user data by login token
+  //TODO: general change users data
+  //TODO: Add a task map to the users tasks_open list
+  //TODO: Remove a task map from the users tasks_open list
+  //TODO: Add a task map to the users tasks_done list
+  //TODO: Remove a task map from the users tasks_done list
+  //TODO: sort the users tasks_open list
+
 }
