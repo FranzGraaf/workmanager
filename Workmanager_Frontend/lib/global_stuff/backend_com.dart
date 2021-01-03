@@ -22,6 +22,12 @@ class Backend_Com {
     return _response;
   }
 
+  Future<double> up() async {
+    String url = _be_url + "/up";
+    double _response = (await Backend_Com().postdata(url, jsonEncode(null)));
+    return _response;
+  }
+
   //TODO: Create DB entry for a new user when registered
   //TODO: get complete user data by login token
   //TODO: general change users data

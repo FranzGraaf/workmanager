@@ -22,6 +22,13 @@ Future<String> registerWithEmailPassword(String email, String password) async {
     creation_time: DateTime.now(),
     tasks_open: [],
     tasks_done: [],
+    monday_time: [],
+    tuesday_time: [],
+    wednesday_time: [],
+    thursday_time: [],
+    friday_time: [],
+    saturday_time: [],
+    sunday_time: [],
   );
   return _id_token;
 }

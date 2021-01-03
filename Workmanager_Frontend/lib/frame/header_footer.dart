@@ -14,7 +14,6 @@ class _Header_FooterState extends State<Header_Footer> {
   final List<String> _show_add_task = [
     Homepage.route,
     Main.route,
-    Main_Profile.route
   ];
 
   @override
