@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                     try {
                       String _id_token =
                           await signInWithEmailPassword(_e_mail, _passwort);
-                      print(_id_token);
+                      //print(_id_token);
                       //TODO: get userdata via backend and save to global_user_data
                       global_usertype = Usertype.user;
                       Navigator.of(context).pushNamed(Homepage.route);

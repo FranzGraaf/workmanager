@@ -1,4 +1,5 @@
 import 'package:Workmanager_Frontend/global_stuff/DB_User.dart';
+import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_functions.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_textinput_v1.dart';
@@ -97,10 +98,19 @@ class _RegisterState extends State<Register> {
                       if (_check_input()) {
                         String _id_token = await registerWithEmailPassword(
                             _e_mail, _passwort_0);
-                        print(_id_token);
-                        //TODO: create user in database via backend
-                        global_usertype = Usertype.user;
-                        Navigator.of(context).pushNamed(Homepage.route);
+                        //print(_id_token);
+                        if (await Backend_Com().create_user()) {
+                          global_usertype = Usertype.user;
+                          Navigator.of(context).pushNamed(Homepage.route);
+                        } else {
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              "Nutzer konnte nicht erstellt werden. Bitte erneut versuchen.",
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(milliseconds: 1500),
+                          ));
+                        }
                       }
                     } catch (e) {
                       Scaffold.of(context).showSnackBar(SnackBar(

@@ -1,16 +1,22 @@
 import 'dart:convert';
+import 'package:Workmanager_Frontend/global_stuff/global_functions.dart';
 import 'package:http/http.dart' as http;
+import 'package:cooky/cooky.dart' as cookie;
 
 class Backend_Com {
   static String _be_url = "http://127.0.0.1:5000";
 
   Future getdata(String url) async {
-    http.Response response = await http.get(url);
+    refresh_id_token();
+    var _header = {"id_token": cookie.get("id_token")};
+    http.Response response = await http.get(url, headers: _header);
     return json.decode(response.body);
   }
 
   Future postdata(String url, dynamic data) async {
-    http.Response response = await http.post(url, body: data);
+    refresh_id_token();
+    var _header = {"id_token": cookie.get("id_token")};
+    http.Response response = await http.post(url, body: data, headers: _header);
     return json.decode(response.body);
   }
 
@@ -22,9 +28,15 @@ class Backend_Com {
     return _response;
   }
 
-  Future<double> up() async {
+  Future<bool> increment_counter() async {
     String url = _be_url + "/up";
-    double _response = (await Backend_Com().postdata(url, jsonEncode(null)));
+    bool _response = (await Backend_Com().postdata(url, jsonEncode(null)));
+    return _response;
+  }
+
+  Future<bool> create_user() async {
+    String url = _be_url + "/create_user";
+    bool _response = (await Backend_Com().postdata(url, jsonEncode(null)));
     return _response;
   }
 

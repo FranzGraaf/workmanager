@@ -23,7 +23,8 @@ def increment_counter(db):
             u"Testcounter": 1,
         })
 
-#json.loads(request.headers) <- header
+
+#request.headers <- header
 #json.loads(request.data) <- body
 
 if __name__ == "__main__":
@@ -34,16 +35,42 @@ if __name__ == "__main__":
     #bucket = db_init.get_bucket()
 
 
-    increment_counter(db)
+    #increment_counter(db)
 
+
+    @app.route('/addieren', methods=["GET", "POST"])
+    def addieren():
+        try:
+            zahl_1 = json.loads(request.data)["zahl_1"]
+            zahl_2 = json.loads(request.data)["zahl_2"]
+            summe = zahl_1 + zahl_2
+            return jsonify({"summe": summe})
+        except Exception as e:
+            print(e)
+        return jsonify("0")
+
+    @app.route('/increment_counter', methods=["GET", "POST"])
+    def increment_counter():
+        doc_ref = db.collection(u"Test").document(u"TD_1")
+        try:
+            old_count = doc_ref.get().to_dict()[u"Testcounter"]
+            doc_ref.update({
+                u"Testcounter": old_count+1,
+            })
+            return jsonify(True)
+        except Exception as e:
+            doc_ref.update({
+                u"Testcounter": 1,
+            })
+        return jsonify(False)
 
 
     @app.route('/create_user', methods=["GET", "POST"])
     def create_user():
         try:
-            id_token = json.loads(request.headers)["id_token"]
+            id_token = request.headers["id_token"]
             user = auth.verify_id_token(id_token)
-            doc_ref = db.collection(u"Users").document(user.uid)
+            doc_ref = db.collection(u"Users").document(user["uid"])
             doc_ref.set({
                 "Creation_Time": datetime.datetime.now(),
                 "Monday_Time": [],
@@ -63,32 +90,7 @@ if __name__ == "__main__":
 
 
 
-    @app.route('/addieren', methods=["GET", "POST"])
-    def addieren():
-        try:
-            zahl_1 = json.loads(request.data)["zahl_1"]
-            zahl_2 = json.loads(request.data)["zahl_2"]
-            summe = zahl_1 + zahl_2
-            return jsonify({"summe": summe})
-        except Exception as e:
-            print(e)
-        return jsonify("0")
-
-    @app.route('/up', methods=["GET", "POST"])
-    def increment_counter():
-        doc_ref = db.collection(u"Test").document(u"TD_1")
-        try:
-            old_count = doc_ref.get().to_dict()[u"Testcounter"]
-            doc_ref.update({
-                u"Testcounter": old_count+1,
-            })
-        except Exception as e:
-            doc_ref.update({
-                u"Testcounter": 1,
-            })
-        return jsonify("0")
 
 
-
-    #app.run() # for development
+    app.run() # for development
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production

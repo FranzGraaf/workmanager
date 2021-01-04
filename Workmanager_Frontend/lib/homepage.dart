@@ -12,8 +12,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //TODO: counter up
-        Backend_Com().up();
+        Backend_Com().increment_counter();
       },
       child: Container(
         child: Center(
