@@ -98,7 +98,6 @@ class _RegisterState extends State<Register> {
                       if (_check_input()) {
                         String _id_token = await registerWithEmailPassword(
                             _e_mail, _passwort_0);
-                        //print(_id_token);
                         if (await Backend_Com().create_user()) {
                           global_usertype = Usertype.user;
                           Navigator.of(context).pushNamed(Homepage.route);
@@ -115,7 +114,7 @@ class _RegisterState extends State<Register> {
                     } catch (e) {
                       Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          e,
+                          e.toString(),
                           textAlign: TextAlign.center,
                         ),
                         duration: Duration(milliseconds: 1500),

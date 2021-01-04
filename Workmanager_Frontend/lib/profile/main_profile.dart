@@ -6,6 +6,7 @@ import 'package:Workmanager_Frontend/profile/all_tasks.dart';
 import 'package:flutter/material.dart';
 
 enum Profile_Change_Data { email, password }
+Map<String, dynamic> click_change_weekday_data;
 
 class Main_Profile extends StatefulWidget {
   static const String route = '/main_profile';
@@ -433,12 +434,14 @@ class _Main_Profile_Schedule_ElementState
     }
   }
 
-  Future<void> _add_time_period(BuildContext n_context) async {
+  Future<void> _add_change_time_period(
+      BuildContext n_context, Map<String, dynamic> period_change) async {
     return showGeneralDialog<void>(
         pageBuilder: (context, anim1, anim2) {
-          return Main_Profile_Add_Time_Period(
+          return Main_Profile_Add_Change_Time_Period(
             weekday: widget.weekday,
             n_context: n_context,
+            period_change: period_change,
           );
         },
         context: context,
@@ -487,16 +490,34 @@ class _Main_Profile_Schedule_ElementState
                         size: _on_mobile ? 20 : 30,
                       ),
                       onPressed: () {
-                        _add_time_period(context);
+                        _add_change_time_period(context, null);
                       })
                 ],
               ),
             ),
             Expanded(
-                child: Container(
-              //color: Colors.greenAccent,
-              child: Text(_get_weekday_data().toString()),
-            ))
+              child: GestureDetector(
+                onTap: () {
+                  if (click_change_weekday_data != null) {
+                    _add_change_time_period(context, click_change_weekday_data);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.orangeAccent.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: CustomPaint(
+                      painter:
+                          Main_Profile_Schedule_Painter(_get_weekday_data()),
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -504,19 +525,72 @@ class _Main_Profile_Schedule_ElementState
   }
 }
 
-class Main_Profile_Add_Time_Period extends StatefulWidget {
-  BuildContext n_context;
-  Schedule_Element_Weekday weekday;
-  Main_Profile_Add_Time_Period({this.weekday, this.n_context});
+class Main_Profile_Schedule_Painter extends CustomPainter {
+  List<Map<String, dynamic>> weekday_data;
+  Main_Profile_Schedule_Painter(this.weekday_data);
+  Size n_size = Size(0, 0);
   @override
-  _Main_Profile_Add_Time_PeriodState createState() =>
-      _Main_Profile_Add_Time_PeriodState();
+  void paint(Canvas canvas, Size size) {
+    n_size = size;
+    /*weekday_data = [
+      {"start": DateTime(0, 0, 0, 5, 0), "end": DateTime(0, 0, 0, 6, 0)},
+      {"start": DateTime(0, 0, 0, 12, 50), "end": DateTime(0, 0, 0, 13, 10)},
+      {"start": DateTime(0, 0, 0, 20, 15), "end": DateTime(0, 0, 0, 23, 30)}
+    ];*/
+    var fill_brush = Paint()..color = Colors.orangeAccent;
+
+    weekday_data.forEach((element) {
+      double _minute_length = size.width / (24 * 60);
+      double _start = (element["start"].hour * 60 + element["start"].minute) *
+          _minute_length;
+      double _end =
+          (element["end"].hour * 60 + element["end"].minute) * _minute_length;
+      canvas.drawRRect(
+          RRect.fromLTRBR(_end, 0, _start, size.height, Radius.circular(0)),
+          fill_brush);
+    });
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+
+  @override
+  bool hitTest(Offset position) {
+    click_change_weekday_data = null;
+    weekday_data.forEach((element) {
+      double _minute_length = n_size.width / (24 * 60);
+      double _start = (element["start"].hour * 60 + element["start"].minute) *
+          _minute_length;
+      double _end =
+          (element["end"].hour * 60 + element["end"].minute) * _minute_length;
+      if (position.dx >= _start && position.dx <= _end) {
+        click_change_weekday_data = element;
+        return super.hitTest(position);
+      }
+    });
+    return super.hitTest(position);
+  }
 }
 
-class _Main_Profile_Add_Time_PeriodState
-    extends State<Main_Profile_Add_Time_Period> {
-  DateTime _von = DateTime.utc(0, 0, 0, 12, 0);
-  DateTime _bis = DateTime.utc(0, 0, 0, 13, 0);
+class Main_Profile_Add_Change_Time_Period extends StatefulWidget {
+  BuildContext n_context;
+  Schedule_Element_Weekday weekday;
+  Map<String, dynamic> period_change;
+  Main_Profile_Add_Change_Time_Period(
+      {this.weekday, this.n_context, this.period_change});
+  @override
+  _Main_Profile_Add_Change_Time_PeriodState createState() =>
+      _Main_Profile_Add_Change_Time_PeriodState();
+}
+
+class _Main_Profile_Add_Change_Time_PeriodState
+    extends State<Main_Profile_Add_Change_Time_Period> {
+  bool _change = false;
+  Schedule_Element_Weekday _temp_weekday;
+  DateTime _von = DateTime(0, 0, 0, 12, 0);
+  DateTime _bis = DateTime(0, 0, 0, 13, 0);
 
   String _get_weekday_name(Schedule_Element_Weekday weekday) {
     switch (weekday) {
@@ -540,6 +614,40 @@ class _Main_Profile_Add_Time_PeriodState
   }
 
   bool _check_input() {
+    if (_change) {
+      switch (_temp_weekday) {
+        case Schedule_Element_Weekday.mo:
+          global_user_data.monday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.tu:
+          global_user_data.tuesday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.we:
+          global_user_data.wednesday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.th:
+          global_user_data.thursday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.fr:
+          global_user_data.friday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.sa:
+          global_user_data.saturday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        case Schedule_Element_Weekday.so:
+          global_user_data.sunday_time
+              .removeWhere((element) => element == widget.period_change);
+          break;
+        default:
+          break;
+      }
+    }
     if (_von.isAfter(_bis)) {
       // sort _von and _bis
       DateTime _temp = _von;
@@ -589,6 +697,33 @@ class _Main_Profile_Add_Time_PeriodState
         ),
         duration: Duration(milliseconds: 1500),
       ));
+      if (_change) {
+        switch (_temp_weekday) {
+          case Schedule_Element_Weekday.mo:
+            global_user_data.monday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.tu:
+            global_user_data.tuesday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.we:
+            global_user_data.wednesday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.th:
+            global_user_data.thursday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.fr:
+            global_user_data.friday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.sa:
+            global_user_data.saturday_time.add(widget.period_change);
+            break;
+          case Schedule_Element_Weekday.so:
+            global_user_data.sunday_time.add(widget.period_change);
+            break;
+          default:
+            break;
+        }
+      }
       return false;
     }
     return true;
@@ -619,6 +754,20 @@ class _Main_Profile_Add_Time_PeriodState
         return;
       default:
         return;
+    }
+    //TODO: add to database via backend
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.period_change == null) {
+      _change = false;
+    } else {
+      _change = true;
+      _temp_weekday = widget.weekday;
+      _von = widget.period_change["start"];
+      _bis = widget.period_change["end"];
     }
   }
 

@@ -48,5 +48,11 @@ class Backend_Com {
   //TODO: Add a task map to the users tasks_done list
   //TODO: Remove a task map from the users tasks_done list
   //TODO: sort the users tasks_open list
+  //TODO: change task map in users tasks open list
+  //(TODO: change task map in users tasks done list)
+
+  //TODO: Add to Monday_Time / Monday_Time / Tuesday_Time / Wednesday_Time / Thursday_Time / Friday_Time / Saturday_Time / Sunday_Time
+  //TODO: Change in Monday_Time / Monday_Time / Tuesday_Time / Wednesday_Time / Thursday_Time / Friday_Time / Saturday_Time / Sunday_Time
+  //TODO: Remove from Monday_Time / Monday_Time / Tuesday_Time / Wednesday_Time / Thursday_Time / Friday_Time / Saturday_Time / Sunday_Time
 
 }
