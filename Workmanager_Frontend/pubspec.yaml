@@ -23,8 +23,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher_web:
+  url_launcher:
+  intl:
   http:
-
+  firebase:
+  webview_flutter:
+  cooky:
+  firebase_core:
+  firebase_auth:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
