@@ -2,6 +2,8 @@ import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/homepage.dart';
 import 'package:Workmanager_Frontend/login_register/login.dart';
 import 'package:Workmanager_Frontend/main.dart';
+import 'package:Workmanager_Frontend/profile/add_change_task_popup.dart';
+import 'package:Workmanager_Frontend/profile/all_tasks.dart';
 import 'package:Workmanager_Frontend/profile/main_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +16,35 @@ class _Header_FooterState extends State<Header_Footer> {
   final List<String> _show_add_task = [
     Homepage.route,
     Main.route,
-    Main_Profile.route
+    All_Tasks.route,
   ];
+
+  Future<void> _add_task(BuildContext n_context) async {
+    return showGeneralDialog<Map<String, dynamic>>(
+        pageBuilder: (context, anim1, anim2) {
+          return Add_Change_Task_Popup(
+            n_context: n_context,
+          );
+        },
+        context: context,
+        barrierDismissible: true, // true = user can tab barrier to close
+        barrierLabel: "barrierLabel",
+        barrierColor: Colors.grey.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 250),
+        transitionBuilder: (context, anim1, anim2, child) {
+          return Transform.scale(
+            scale: anim1.value,
+            child: child,
+          );
+        }).then((value) {
+      Scaffold.of(n_context).removeCurrentSnackBar();
+      try {
+        global_streamController_task_added.add(value);
+      } catch (e) {
+        print(e);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +83,7 @@ class _Header_FooterState extends State<Header_Footer> {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      //TODO: Add task
+                      _add_task(context);
                     },
                   ),
                 ),

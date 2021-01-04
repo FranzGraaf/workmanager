@@ -7,6 +7,7 @@ import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/homepage.dart';
 import 'package:Workmanager_Frontend/login_register/login.dart';
 import 'package:Workmanager_Frontend/login_register/register.dart';
+import 'package:Workmanager_Frontend/profile/all_tasks.dart';
 import 'package:Workmanager_Frontend/profile/main_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,11 @@ class _Main_DrawerState extends State<Main_Drawer> {
                         child: Text("Profil"))
                     : Container(),
                 global_usertype == Usertype.user
-                    ? FlatButton(onPressed: () {}, child: Text("alle Aufgaben"))
+                    ? FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(All_Tasks.route);
+                        },
+                        child: Text("alle Aufgaben"))
                     : Container(),
                 global_usertype == Usertype.visitor
                     ? FlatButton(

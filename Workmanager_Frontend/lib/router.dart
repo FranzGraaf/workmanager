@@ -3,12 +3,19 @@ import 'package:Workmanager_Frontend/homepage.dart';
 import 'package:Workmanager_Frontend/login_register/login.dart';
 import 'package:Workmanager_Frontend/login_register/register.dart';
 import 'package:Workmanager_Frontend/main.dart';
+import 'package:Workmanager_Frontend/profile/all_tasks.dart';
 import 'package:Workmanager_Frontend/profile/main_profile.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case Main_Profile.route:
+      if (global_usertype == Usertype.visitor) {
+        return _default_PageRoute(
+            RouteSettings(name: Homepage.route, arguments: settings.arguments));
+      }
+      return _default_PageRoute(settings);
+    case All_Tasks.route:
       if (global_usertype == Usertype.visitor) {
         return _default_PageRoute(
             RouteSettings(name: Homepage.route, arguments: settings.arguments));

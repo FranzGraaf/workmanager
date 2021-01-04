@@ -4,11 +4,13 @@ import 'package:Workmanager_Frontend/frame/frame_pages/datenschutz.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/impressum.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/nutzungsbedingungen.dart';
 import 'package:Workmanager_Frontend/frame/header_footer.dart';
+import 'package:Workmanager_Frontend/global_stuff/DB_User.dart';
 import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/homepage.dart';
 import 'package:Workmanager_Frontend/login_register/login.dart';
 import 'package:Workmanager_Frontend/login_register/register.dart';
+import 'package:Workmanager_Frontend/profile/all_tasks.dart';
 import 'package:Workmanager_Frontend/profile/main_profile.dart';
 import 'package:Workmanager_Frontend/router.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +54,18 @@ class _MainState extends State<Main> {
       global_usertype = Usertype.user;
       if (global_user_data == null) {
         //TODO: get userdata via backend
+        global_user_data = DB_User(
+          creation_time: DateTime.now(),
+          tasks_open: [],
+          tasks_done: [],
+          monday_time: [],
+          tuesday_time: [],
+          wednesday_time: [],
+          thursday_time: [],
+          friday_time: [],
+          saturday_time: [],
+          sunday_time: [],
+        );
       }
     }
   }
@@ -91,6 +105,8 @@ Widget get_main_widget() {
       return Nutzungsbedingungen();
     case Datenschutz.route:
       return Datenschutz();
+    case All_Tasks.route:
+      return All_Tasks();
     default:
       return Homepage();
   }

@@ -22,6 +22,13 @@ Future<String> registerWithEmailPassword(String email, String password) async {
     creation_time: DateTime.now(),
     tasks_open: [],
     tasks_done: [],
+    monday_time: [],
+    tuesday_time: [],
+    wednesday_time: [],
+    thursday_time: [],
+    friday_time: [],
+    saturday_time: [],
+    sunday_time: [],
   );
   return _id_token;
 }
@@ -76,4 +83,11 @@ Future<String> refresh_id_token() async {
     return _new_id_token;
   }
   return "";
+}
+
+String printDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  //String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  return "${twoDigits(duration.inHours)}:$twoDigitMinutes" /*:$twoDigitSeconds"*/;
 }
