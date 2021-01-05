@@ -1,3 +1,7 @@
+import 'package:Workmanager_Frontend/calender_views/day_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/month_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/week_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/year_calender.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/about_us.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/datenschutz.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/impressum.dart';
@@ -87,10 +91,26 @@ class _Main_DrawerState extends State<Main_Drawer> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FlatButton(onPressed: () {}, child: Text("Tag")),
-                FlatButton(onPressed: () {}, child: Text("Woche")),
-                FlatButton(onPressed: () {}, child: Text("Monat")),
-                FlatButton(onPressed: () {}, child: Text("Jahr")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Day_Calender.route);
+                    },
+                    child: Text("Tag")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Week_Calender.route);
+                    },
+                    child: Text("Woche")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Month_Calender.route);
+                    },
+                    child: Text("Monat")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Year_Calender.route);
+                    },
+                    child: Text("Jahr")),
               ],
             ),
             Column(

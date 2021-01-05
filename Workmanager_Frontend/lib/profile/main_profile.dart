@@ -1,4 +1,5 @@
 import 'package:Workmanager_Frontend/global_stuff/DB_User.dart';
+import 'package:Workmanager_Frontend/global_stuff/global_functions.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_text_datepicker_v1.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_textinput_v1.dart';
@@ -332,43 +333,43 @@ class _Main_Profile_Schedule_SetupState
       child: Column(
         children: [
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.mo,
+            weekday: Weekday.mo,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.tu,
+            weekday: Weekday.tu,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.we,
+            weekday: Weekday.we,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.th,
+            weekday: Weekday.th,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.fr,
+            weekday: Weekday.fr,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.sa,
+            weekday: Weekday.sa,
             refresh: () {
               setState(() {});
             },
           ),
           Main_Profile_Schedule_Element(
-            weekday: Schedule_Element_Weekday.so,
+            weekday: Weekday.so,
             refresh: () {
               setState(() {});
             },
@@ -379,10 +380,8 @@ class _Main_Profile_Schedule_SetupState
   }
 }
 
-enum Schedule_Element_Weekday { mo, tu, we, th, fr, sa, so }
-
 class Main_Profile_Schedule_Element extends StatefulWidget {
-  Schedule_Element_Weekday weekday;
+  Weekday weekday;
   Function() refresh;
   Main_Profile_Schedule_Element({this.weekday, this.refresh});
   @override
@@ -392,42 +391,21 @@ class Main_Profile_Schedule_Element extends StatefulWidget {
 
 class _Main_Profile_Schedule_ElementState
     extends State<Main_Profile_Schedule_Element> {
-  String _get_weekday_name() {
-    switch (widget.weekday) {
-      case Schedule_Element_Weekday.mo:
-        return "Mo";
-      case Schedule_Element_Weekday.tu:
-        return "Di";
-      case Schedule_Element_Weekday.we:
-        return "Mi";
-      case Schedule_Element_Weekday.th:
-        return "Do";
-      case Schedule_Element_Weekday.fr:
-        return "Fr";
-      case Schedule_Element_Weekday.sa:
-        return "Sa";
-      case Schedule_Element_Weekday.so:
-        return "So";
-      default:
-        return "Error";
-    }
-  }
-
   List<Map<String, dynamic>> _get_weekday_data() {
     switch (widget.weekday) {
-      case Schedule_Element_Weekday.mo:
+      case Weekday.mo:
         return global_user_data.monday_time;
-      case Schedule_Element_Weekday.tu:
+      case Weekday.tu:
         return global_user_data.tuesday_time;
-      case Schedule_Element_Weekday.we:
+      case Weekday.we:
         return global_user_data.wednesday_time;
-      case Schedule_Element_Weekday.th:
+      case Weekday.th:
         return global_user_data.thursday_time;
-      case Schedule_Element_Weekday.fr:
+      case Weekday.fr:
         return global_user_data.friday_time;
-      case Schedule_Element_Weekday.sa:
+      case Weekday.sa:
         return global_user_data.saturday_time;
-      case Schedule_Element_Weekday.so:
+      case Weekday.so:
         return global_user_data.sunday_time;
       default:
         return null;
@@ -481,7 +459,7 @@ class _Main_Profile_Schedule_ElementState
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    _get_weekday_name(),
+                    get_weekday_name(widget.weekday),
                     style: TextStyle(fontSize: _on_mobile ? 14 : 30),
                   ),
                   IconButton(
@@ -576,7 +554,7 @@ class Main_Profile_Schedule_Painter extends CustomPainter {
 
 class Main_Profile_Add_Change_Time_Period extends StatefulWidget {
   BuildContext n_context;
-  Schedule_Element_Weekday weekday;
+  Weekday weekday;
   Map<String, dynamic> period_change;
   Main_Profile_Add_Change_Time_Period(
       {this.weekday, this.n_context, this.period_change});
@@ -588,25 +566,25 @@ class Main_Profile_Add_Change_Time_Period extends StatefulWidget {
 class _Main_Profile_Add_Change_Time_PeriodState
     extends State<Main_Profile_Add_Change_Time_Period> {
   bool _change = false;
-  Schedule_Element_Weekday _temp_weekday;
+  Weekday _temp_weekday;
   DateTime _von = DateTime(0, 0, 0, 12, 0);
   DateTime _bis = DateTime(0, 0, 0, 13, 0);
 
-  String _get_weekday_name(Schedule_Element_Weekday weekday) {
+  String _get_weekday_name(Weekday weekday) {
     switch (weekday) {
-      case Schedule_Element_Weekday.mo:
+      case Weekday.mo:
         return "Mo";
-      case Schedule_Element_Weekday.tu:
+      case Weekday.tu:
         return "Di";
-      case Schedule_Element_Weekday.we:
+      case Weekday.we:
         return "Mi";
-      case Schedule_Element_Weekday.th:
+      case Weekday.th:
         return "Do";
-      case Schedule_Element_Weekday.fr:
+      case Weekday.fr:
         return "Fr";
-      case Schedule_Element_Weekday.sa:
+      case Weekday.sa:
         return "Sa";
-      case Schedule_Element_Weekday.so:
+      case Weekday.so:
         return "So";
       default:
         return "Error";
@@ -616,31 +594,31 @@ class _Main_Profile_Add_Change_Time_PeriodState
   bool _check_input() {
     if (_change) {
       switch (_temp_weekday) {
-        case Schedule_Element_Weekday.mo:
+        case Weekday.mo:
           global_user_data.monday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.tu:
+        case Weekday.tu:
           global_user_data.tuesday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.we:
+        case Weekday.we:
           global_user_data.wednesday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.th:
+        case Weekday.th:
           global_user_data.thursday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.fr:
+        case Weekday.fr:
           global_user_data.friday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.sa:
+        case Weekday.sa:
           global_user_data.saturday_time
               .removeWhere((element) => element == widget.period_change);
           break;
-        case Schedule_Element_Weekday.so:
+        case Weekday.so:
           global_user_data.sunday_time
               .removeWhere((element) => element == widget.period_change);
           break;
@@ -656,25 +634,25 @@ class _Main_Profile_Add_Change_Time_PeriodState
     }
     List<Map<String, dynamic>> _temp_times;
     switch (widget.weekday) {
-      case Schedule_Element_Weekday.mo:
+      case Weekday.mo:
         _temp_times = global_user_data.monday_time;
         break;
-      case Schedule_Element_Weekday.tu:
+      case Weekday.tu:
         _temp_times = global_user_data.tuesday_time;
         break;
-      case Schedule_Element_Weekday.we:
+      case Weekday.we:
         _temp_times = global_user_data.wednesday_time;
         break;
-      case Schedule_Element_Weekday.th:
+      case Weekday.th:
         _temp_times = global_user_data.thursday_time;
         break;
-      case Schedule_Element_Weekday.fr:
+      case Weekday.fr:
         _temp_times = global_user_data.friday_time;
         break;
-      case Schedule_Element_Weekday.sa:
+      case Weekday.sa:
         _temp_times = global_user_data.saturday_time;
         break;
-      case Schedule_Element_Weekday.so:
+      case Weekday.so:
         _temp_times = global_user_data.sunday_time;
         break;
       default:
@@ -699,25 +677,25 @@ class _Main_Profile_Add_Change_Time_PeriodState
       ));
       if (_change) {
         switch (_temp_weekday) {
-          case Schedule_Element_Weekday.mo:
+          case Weekday.mo:
             global_user_data.monday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.tu:
+          case Weekday.tu:
             global_user_data.tuesday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.we:
+          case Weekday.we:
             global_user_data.wednesday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.th:
+          case Weekday.th:
             global_user_data.thursday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.fr:
+          case Weekday.fr:
             global_user_data.friday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.sa:
+          case Weekday.sa:
             global_user_data.saturday_time.add(widget.period_change);
             break;
-          case Schedule_Element_Weekday.so:
+          case Weekday.so:
             global_user_data.sunday_time.add(widget.period_change);
             break;
           default:
@@ -731,25 +709,25 @@ class _Main_Profile_Add_Change_Time_PeriodState
 
   void _add_to_user_schedule() {
     switch (widget.weekday) {
-      case Schedule_Element_Weekday.mo:
+      case Weekday.mo:
         global_user_data.monday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.tu:
+      case Weekday.tu:
         global_user_data.tuesday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.we:
+      case Weekday.we:
         global_user_data.wednesday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.th:
+      case Weekday.th:
         global_user_data.thursday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.fr:
+      case Weekday.fr:
         global_user_data.friday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.sa:
+      case Weekday.sa:
         global_user_data.saturday_time.add({"start": _von, "end": _bis});
         return;
-      case Schedule_Element_Weekday.so:
+      case Weekday.so:
         global_user_data.sunday_time.add({"start": _von, "end": _bis});
         return;
       default:
@@ -795,7 +773,7 @@ class _Main_Profile_Add_Change_Time_PeriodState
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text("Wochentag "),
-                      DropdownButton<Schedule_Element_Weekday>(
+                      DropdownButton<Weekday>(
                         value: widget.weekday,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
@@ -805,22 +783,21 @@ class _Main_Profile_Add_Change_Time_PeriodState
                           height: 2,
                           color: Colors.black,
                         ),
-                        onChanged: (Schedule_Element_Weekday newValue) {
+                        onChanged: (Weekday newValue) {
                           setState(() {
                             widget.weekday = newValue;
                           });
                         },
-                        items: <Schedule_Element_Weekday>[
-                          Schedule_Element_Weekday.mo,
-                          Schedule_Element_Weekday.tu,
-                          Schedule_Element_Weekday.we,
-                          Schedule_Element_Weekday.th,
-                          Schedule_Element_Weekday.fr,
-                          Schedule_Element_Weekday.sa,
-                          Schedule_Element_Weekday.so
-                        ].map<DropdownMenuItem<Schedule_Element_Weekday>>(
-                            (Schedule_Element_Weekday value) {
-                          return DropdownMenuItem<Schedule_Element_Weekday>(
+                        items: <Weekday>[
+                          Weekday.mo,
+                          Weekday.tu,
+                          Weekday.we,
+                          Weekday.th,
+                          Weekday.fr,
+                          Weekday.sa,
+                          Weekday.so
+                        ].map<DropdownMenuItem<Weekday>>((Weekday value) {
+                          return DropdownMenuItem<Weekday>(
                             value: value,
                             child: Text(_get_weekday_name(value)),
                           );

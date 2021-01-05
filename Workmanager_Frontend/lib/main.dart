@@ -1,3 +1,7 @@
+import 'package:Workmanager_Frontend/calender_views/day_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/month_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/week_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/year_calender.dart';
 import 'package:Workmanager_Frontend/frame/drawer.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/about_us.dart';
 import 'package:Workmanager_Frontend/frame/frame_pages/datenschutz.dart';
@@ -53,7 +57,8 @@ class _MainState extends State<Main> {
     if (cookie.get("id_token") != null && cookie.get("id_token") != "") {
       global_usertype = Usertype.user;
       if (global_user_data == null) {
-        //TODO: get userdata via backend
+        //TODO: get userdata via backend instead of creating sample data
+        // sample data start --------------------------------------------------
         global_user_data = DB_User(
           creation_time: DateTime.now(),
           tasks_open: [],
@@ -66,6 +71,42 @@ class _MainState extends State<Main> {
           saturday_time: [],
           sunday_time: [],
         );
+        global_user_data.tasks_open = [
+          {
+            "title": "open1",
+            "duration": Duration(hours: 2, minutes: 50),
+            "deadline": DateTime(2021, 01, 15),
+            "description": "kurze Beschreibung",
+            "priority": 1
+          },
+          {
+            "title": "open2sfgsgewfsadfwqeasdsdfsdgsfeqreref",
+            "duration": Duration(hours: 1, minutes: 30),
+            "deadline": DateTime(2021, 01, 12),
+            "description": "kurze Beschreibung 2",
+            "priority": 0
+          },
+        ];
+        global_user_data.tasks_done = [
+          {
+            "title": "done1",
+            "duration": Duration(hours: 2, minutes: 50),
+            "deadline": DateTime(2021, 01, 15),
+            "description": "kurze Beschreibung",
+            "priority": 1
+          },
+          {
+            "title": "done2",
+            "duration": Duration(hours: 1, minutes: 30),
+            "deadline": DateTime(2021, 01, 12),
+            "description": "kurze Beschreibung 2",
+            "priority": 0
+          },
+        ];
+        global_user_data.tuesday_time = [
+          {"start": DateTime(0, 0, 0, 8, 30), "end": DateTime(0, 0, 0, 12, 15)}
+        ];
+        // sample data end ----------------------------------------------------
       }
     }
   }
@@ -107,6 +148,14 @@ Widget get_main_widget() {
       return Datenschutz();
     case All_Tasks.route:
       return All_Tasks();
+    case Day_Calender.route:
+      return Day_Calender();
+    case Week_Calender.route:
+      return Week_Calender();
+    case Month_Calender.route:
+      return Month_Calender();
+    case Year_Calender.route:
+      return Year_Calender();
     default:
       return Homepage();
   }

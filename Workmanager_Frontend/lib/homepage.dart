@@ -1,3 +1,4 @@
+import 'package:Workmanager_Frontend/calender_views/day_calender.dart';
 import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _HomepageState extends State<Homepage> {
       },
       child: Container(
         child: Center(
-          child: Text("homepage"),
+          child: Day_Calender(), //Text("homepage"),
         ),
       ),
     );

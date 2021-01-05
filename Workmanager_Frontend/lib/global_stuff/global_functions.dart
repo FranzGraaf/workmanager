@@ -91,3 +91,50 @@ String printDuration(Duration duration) {
   //String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
   return "${twoDigits(duration.inHours)}:$twoDigitMinutes" /*:$twoDigitSeconds"*/;
 }
+
+double calc_length_min(
+  double min_length,
+  double screen_percentage,
+  double screen_length,
+) {
+  // outputs a length with a minimum value
+  if (screen_percentage * screen_length < min_length) {
+    return min_length;
+  } else {
+    return screen_percentage * screen_length;
+  }
+}
+
+double calc_length_max(
+  double max_length,
+  double screen_percentage,
+  double screen_length,
+) {
+  // outputs a length with a maximum value
+  if (screen_percentage * screen_length > max_length) {
+    return max_length;
+  } else {
+    return screen_percentage * screen_length;
+  }
+}
+
+String get_weekday_name(Weekday weekday) {
+  switch (weekday) {
+    case Weekday.mo:
+      return "Mo";
+    case Weekday.tu:
+      return "Di";
+    case Weekday.we:
+      return "Mi";
+    case Weekday.th:
+      return "Do";
+    case Weekday.fr:
+      return "Fr";
+    case Weekday.sa:
+      return "Sa";
+    case Weekday.so:
+      return "So";
+    default:
+      return "Error";
+  }
+}

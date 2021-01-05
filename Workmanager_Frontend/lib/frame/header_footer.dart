@@ -1,3 +1,7 @@
+import 'package:Workmanager_Frontend/calender_views/day_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/month_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/week_calender.dart';
+import 'package:Workmanager_Frontend/calender_views/year_calender.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/homepage.dart';
 import 'package:Workmanager_Frontend/login_register/login.dart';
@@ -50,6 +54,65 @@ class _Header_FooterState extends State<Header_Footer> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            alignment: Alignment.topLeft,
+            width: 250,
+            height: 35,
+            decoration: BoxDecoration(
+                color: Colors.orangeAccent,
+                borderRadius:
+                    BorderRadius.only(bottomRight: Radius.circular(60))),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 60,
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.view_day,
+                    size: 15,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Day_Calender.route);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.calendar_view_day,
+                    size: 15,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Week_Calender.route);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    size: 15,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Month_Calender.route);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.calendar_today_sharp,
+                    size: 15,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Year_Calender.route);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
         Align(
           alignment: Alignment.topLeft,
           child: Container(
