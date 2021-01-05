@@ -14,6 +14,10 @@ Usertype global_usertype = Usertype.visitor;
 
 DB_User global_user_data;
 
+enum Weekday { mo, tu, we, th, fr, sa, so }
+
+DateTime global_view_date;
+
 // Global stream controllers--------------------------------------------------------------
 StreamController<Map<String, dynamic>> global_streamController_task_added =
     StreamController.broadcast();

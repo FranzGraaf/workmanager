@@ -19,38 +19,6 @@ class _All_TasksState extends State<All_Tasks> {
     global_streamController_task_added.stream.listen((event) {
       setState(() {});
     });
-    /*global_user_data.tasks_open = [
-      {
-        "title": "open1",
-        "duration": Duration(hours: 2, minutes: 50),
-        "deadline": DateTime(2021, 01, 15),
-        "description": "kurze Beschreibung",
-        "priority": 1
-      },
-      {
-        "title": "open2",
-        "duration": Duration(hours: 1, minutes: 30),
-        "deadline": DateTime(2021, 01, 12),
-        "description": "kurze Beschreibung 2",
-        "priority": 0
-      },
-    ];
-    global_user_data.tasks_done = [
-      {
-        "title": "done1",
-        "duration": Duration(hours: 2, minutes: 50),
-        "deadline": DateTime(2021, 01, 15),
-        "description": "kurze Beschreibung",
-        "priority": 1
-      },
-      {
-        "title": "done2",
-        "duration": Duration(hours: 1, minutes: 30),
-        "deadline": DateTime(2021, 01, 12),
-        "description": "kurze Beschreibung 2",
-        "priority": 0
-      },
-    ];*/
   }
 
   @override
