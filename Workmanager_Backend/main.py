@@ -50,6 +50,30 @@ if __name__ == "__main__":
         return jsonify(False)
 
     '''
+    TODO: Add a task map to the users tasks_open list 
+    HEADER: {"id_token": <string>} 
+    BODY: {"titel": "Einkaufen", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1} 
+    RETURN: {True/False} 
+    '''
+
+    @app.route('/task_to_open', methods=['POST'])
+    def add_open_task():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            tasks.append(task)
+            doc_ref.update({
+                "Tasks_Open": tasks
+            })
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
     TODO: general change users data 
     HEADER: {"id_token": <string>} 
     BODY: {"name": <string>, "value": <dynamic>}
@@ -140,5 +164,6 @@ if __name__ == "__main__":
 
     #app.run() # for development
     #create_user()
-change_user_data1()
+
+task_to_open_list1()
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production
