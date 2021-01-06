@@ -21,6 +21,10 @@ class _Header_FooterState extends State<Header_Footer> {
     Homepage.route,
     Main.route,
     All_Tasks.route,
+    Day_Calender.route,
+    Week_Calender.route,
+    Month_Calender.route,
+    Year_Calender.route,
   ];
 
   Future<void> _add_task(BuildContext n_context) async {

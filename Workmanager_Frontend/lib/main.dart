@@ -53,60 +53,60 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
+    // sample data start --------------------------------------------------
+    global_user_data = DB_User(
+      creation_time: DateTime.now(),
+      tasks_open: [],
+      tasks_done: [],
+      monday_time: [],
+      tuesday_time: [],
+      wednesday_time: [],
+      thursday_time: [],
+      friday_time: [],
+      saturday_time: [],
+      sunday_time: [],
+    );
+    global_user_data.tasks_open = [
+      {
+        "title": "open1",
+        "duration": Duration(hours: 2, minutes: 50),
+        "deadline": DateTime(2021, 01, 15),
+        "description": "kurze Beschreibung",
+        "priority": 1
+      },
+      {
+        "title": "open2sfgsgewfsadfwqeasdsdfsdgsfeqreref",
+        "duration": Duration(hours: 1, minutes: 30),
+        "deadline": DateTime(2021, 01, 12),
+        "description": "kurze Beschreibung 2",
+        "priority": 0
+      },
+    ];
+    global_user_data.tasks_done = [
+      {
+        "title": "done1",
+        "duration": Duration(hours: 2, minutes: 50),
+        "deadline": DateTime(2021, 01, 15),
+        "description": "kurze Beschreibung",
+        "priority": 1
+      },
+      {
+        "title": "done2",
+        "duration": Duration(hours: 1, minutes: 30),
+        "deadline": DateTime(2021, 01, 12),
+        "description": "kurze Beschreibung 2",
+        "priority": 0
+      },
+    ];
+    global_user_data.tuesday_time = [
+      {"start": DateTime(0, 0, 0, 8, 30), "end": DateTime(0, 0, 0, 12, 15)}
+    ];
+    // sample data end ----------------------------------------------------
     // check if user is logged in
     if (cookie.get("id_token") != null && cookie.get("id_token") != "") {
       global_usertype = Usertype.user;
       if (global_user_data == null) {
         //TODO: get userdata via backend instead of creating sample data
-        // sample data start --------------------------------------------------
-        global_user_data = DB_User(
-          creation_time: DateTime.now(),
-          tasks_open: [],
-          tasks_done: [],
-          monday_time: [],
-          tuesday_time: [],
-          wednesday_time: [],
-          thursday_time: [],
-          friday_time: [],
-          saturday_time: [],
-          sunday_time: [],
-        );
-        global_user_data.tasks_open = [
-          {
-            "title": "open1",
-            "duration": Duration(hours: 2, minutes: 50),
-            "deadline": DateTime(2021, 01, 15),
-            "description": "kurze Beschreibung",
-            "priority": 1
-          },
-          {
-            "title": "open2sfgsgewfsadfwqeasdsdfsdgsfeqreref",
-            "duration": Duration(hours: 1, minutes: 30),
-            "deadline": DateTime(2021, 01, 12),
-            "description": "kurze Beschreibung 2",
-            "priority": 0
-          },
-        ];
-        global_user_data.tasks_done = [
-          {
-            "title": "done1",
-            "duration": Duration(hours: 2, minutes: 50),
-            "deadline": DateTime(2021, 01, 15),
-            "description": "kurze Beschreibung",
-            "priority": 1
-          },
-          {
-            "title": "done2",
-            "duration": Duration(hours: 1, minutes: 30),
-            "deadline": DateTime(2021, 01, 12),
-            "description": "kurze Beschreibung 2",
-            "priority": 0
-          },
-        ];
-        global_user_data.tuesday_time = [
-          {"start": DateTime(0, 0, 0, 8, 30), "end": DateTime(0, 0, 0, 12, 15)}
-        ];
-        // sample data end ----------------------------------------------------
       }
     }
   }

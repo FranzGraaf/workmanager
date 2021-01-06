@@ -48,9 +48,8 @@ class _Day_CalenderState extends State<Day_Calender> {
     final _screen_size = MediaQuery.of(context).size;
     bool _on_mobile = _screen_size.width < global_mobile_treshold;
 
-    return Container(
-        child: SingleChildScrollView(
-            child: Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
@@ -125,7 +124,7 @@ class _Day_CalenderState extends State<Day_Calender> {
           height: 70,
         )
       ],
-    )));
+    ));
   }
 }
 
