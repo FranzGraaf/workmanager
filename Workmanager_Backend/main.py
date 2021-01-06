@@ -9,27 +9,10 @@ import firebase_admin
 from firebase_admin import credentials, firestore, storage, auth
 
 
-<<<<<<< HEAD
-=======
-
-
-def increment_counter(db):
-    doc_ref = db.collection(u"Test").document(u"TD_1")
-    try:
-        old_count = doc_ref.get().to_dict()[u"Testcounter"]
-        doc_ref.update({
-            u"Testcounter": old_count+1,
-        })
-    except Exception as e:
-        doc_ref.update({
-            u"Testcounter": 1,
-        })
-
-
 #request.headers <- header
 #json.loads(request.data) <- body
 
->>>>>>> 3c7fbd5d6041b87a4b802e663d5cbc2fd4c670b0
+
 if __name__ == "__main__":
     app = Flask(__name__)
     CORS(app, supports_credentials=True) # used to test the application locally in connection with a web browser
@@ -38,7 +21,6 @@ if __name__ == "__main__":
     #bucket = db_init.get_bucket()
 
 
-    #increment_counter(db)
 
 
     @app.route('/addieren', methods=["GET", "POST"])
@@ -67,6 +49,54 @@ if __name__ == "__main__":
             })
         return jsonify(False)
 
+    '''
+    TODO: general change users data 
+    HEADER: {"id_token": <string>} 
+    BODY: {"name": <string>, "value": <dynamic>}
+    RETURN: {True/False} 
+    '''
+
+    @app.route('/change_user_data', methods=['POST'])
+    def change_user_data():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            fieldname = json.loads(request.data)["name"]
+            new_value = json.loads(request.data)["value"]
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            doc_ref.update({
+                fieldname: new_value,
+            })
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    TODO: get complete user data by login token
+    HEADER: {"id_token": <string>}
+    BODY: {}
+    RETURN: {komplette Nutzerdaten als dict}
+    '''
+
+    @app.route('/get_user', methods=["POST"])
+    def get_userdata():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            user_data = doc_ref.get().to_dict()
+            return jsonify(user_data)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    TODO: Create DB entry for a new user when registered 
+    HEADER: {"id_token": <string>} 
+    BODY: {} 
+    RETURN: {True/False} 
+    '''
 
     @app.route('/create_user', methods=["GET", "POST"])
     def create_user():
@@ -103,9 +133,12 @@ if __name__ == "__main__":
                 if "prio" in aufgabe and time > time_needed:
                     today.append(aufgabe)
                     time_aufgaben_gesamt.append(time)
-                elif
+                elif "prio" in aufgaben:
+                    pass
 
 
 
-    app.run() # for development
+    #app.run() # for development
+    #create_user()
+change_user_data1()
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production
