@@ -50,6 +50,162 @@ if __name__ == "__main__":
         return jsonify(False)
 
     '''
+    TODO: sort the users tasks_open list 
+    HEADER: {"id_token": <string>}
+    BODY: {} 
+    RETURN: {sortierte Task_Open Liste}
+    '''
+
+    @app.route('/sort_open_tasks', methods=['POST'])
+    def sort_open_tasks():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            schedule = []
+            for ind, element in enumerate(tasks):
+                m = element.split(": ")
+                z = m[3].split(", ")
+                x = (ind, z[0])
+                schedule.append(x)
+            def takeSecond(elem):
+                return elem[1]
+            schedule.sort(key=takeSecond)
+            n = [i[0] for i in schedule]
+            sorted_tasks = [x for _, x in sorted(zip(n, tasks))]
+            return jsonify(sorted_tasks)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    Ändern eines Elements der Task_Done Liste 
+    HEADER: {"id_token": <string>} 
+    BODY: [{"titel": "altes Element", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1}, {"titel": "neues Element", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1}] 
+    RETURN: {sortierte Task_Open Liste} 
+    '''
+
+    @app.route('/change_task_done', methods=['POST'])
+    def change_task_done():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            tasks.remove(task[0])
+            tasks.append(task[1])
+            doc_ref.update({
+                "Tasks_Open": tasks
+            })
+            sort_open_tasks()
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    Ändern eines Elements der Task_Open Liste 
+    HEADER: {"id_token": <string>} 
+    BODY: [{"titel": "altes Element", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1}, {"titel": "neues Element", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1}] 
+    RETURN: {sortierte Task_Open Liste} 
+    '''
+
+    @app.route('/change_task_open', methods=['POST'])
+    def change_open_task():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            tasks.remove(task[0])
+            tasks.append(task[1])
+            #open_tasks sort function()
+            doc_ref.update({
+                "Tasks_Open": tasks
+            })
+            sort_open_tasks()
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    TODO: Remove a task map from the users tasks_done list 
+    HEADER: {"id_token": <string>} 
+    BODY: {"titel": "Einkaufen", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1} 
+    RETURN: {True/False}
+    '''
+
+    @app.route('/delete_done_task', methods=['POST'])
+    def remove_done_task():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Done"]
+            tasks.remove(task)
+            doc_ref.update({
+                "Tasks_Done": tasks
+            })
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    TODO: Add a task map to the users tasks_done list 
+    HEADER: {"id_token": <string>} 
+    BODY: {"titel": "Einkaufen", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1} 
+    RETURN: {True/False} 
+    '''
+
+    @app.route('/task_to_done', methods=['POST'])
+    def add_done_task():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Done"]
+            tasks.append(task)
+            doc_ref.update({
+                "Tasks_Done": tasks
+            })
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
+    TODO: Remove a task map from the users tasks_open list 
+    HEADER: {"id_token": <string>} 
+    BODY: {"titel": "Einkaufen", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1} 
+    RETURN: {True/False} 
+    '''
+
+    @app.route('/delete_open_task', methods=['POST'])
+    def remove_open_task():
+        try:
+            id_token = request.headers["id_token"]
+            user = auth.verify_id_token(id_token)
+            doc_ref = db.collection(u"Users").document(user["uid"])
+            task = json.loads(request.data)
+            tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            tasks.remove(task)
+            doc_ref.update({
+                "Tasks_Open": tasks
+            })
+            return jsonify(True)
+        except Exception as e:
+            print(e)
+            return jsonify(False)
+
+    '''
     TODO: Add a task map to the users tasks_open list 
     HEADER: {"id_token": <string>} 
     BODY: {"titel": "Einkaufen", "duration": 01:00, "deadline": 05.01.2021 0:00, "description": "", "priority": 1} 
@@ -165,5 +321,4 @@ if __name__ == "__main__":
     #app.run() # for development
     #create_user()
 
-task_to_open_list1()
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production
