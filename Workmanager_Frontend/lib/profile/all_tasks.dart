@@ -1,3 +1,4 @@
+import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_functions.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_rot_button.dart';
@@ -208,17 +209,21 @@ class _All_Tasks_List_ElementState extends State<All_Tasks_List_Element> {
                       value: widget.type == All_Tasks_List_Type.done,
                       onChanged: (value) {
                         if (widget.type == All_Tasks_List_Type.done) {
+                          Backend_Com()
+                              .task_to_open(widget.task_list[widget.index]);
+                          Backend_Com()
+                              .delete_done_task(widget.task_list[widget.index]);
                           global_user_data.tasks_open
                               .add(widget.task_list[widget.index]);
                           widget.task_list.removeAt(widget.index);
-                          // TODO: add to open list in backend
-                          // TODO: remove from done list in backend
                         } else {
+                          Backend_Com()
+                              .task_to_done(widget.task_list[widget.index]);
+                          Backend_Com()
+                              .delete_open_task(widget.task_list[widget.index]);
                           global_user_data.tasks_done
                               .add(widget.task_list[widget.index]);
                           widget.task_list.removeAt(widget.index);
-                          // TODO: add to done list in backend
-                          // TODO: remove from open list in backend
                         }
                         global_streamController_task_added.add(null);
                       }),

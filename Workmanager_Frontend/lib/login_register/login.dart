@@ -1,3 +1,4 @@
+import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_functions.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_textinput_v1.dart';
@@ -78,7 +79,7 @@ class _LoginState extends State<Login> {
                       String _id_token =
                           await signInWithEmailPassword(_e_mail, _passwort);
                       //print(_id_token);
-                      //TODO: get userdata via backend and save to global_user_data
+                      global_user_data = await Backend_Com().get_user();
                       global_usertype = Usertype.user;
                       Navigator.of(context).pushNamed(Homepage.route);
                     } catch (e) {

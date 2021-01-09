@@ -7,10 +7,44 @@ import json
 from DB_Interactions.db_init import DB_Init
 import firebase_admin
 from firebase_admin import credentials, firestore, storage, auth
+import pytz
+from google.api_core.datetime_helpers import DatetimeWithNanoseconds
 
 
 #request.headers <- header
 #json.loads(request.data) <- body
+
+def url_to_date(url_date):
+    # 2020-08-15 16:00:14.366
+    temp = url_date.split("-", 1)
+    year = int(temp[0])
+    temp = temp[1].split("-", 1)
+    month = int(temp[0])
+    temp = temp[1].split(" ", 1)
+    day = int(temp[0])
+    temp = temp[1].split(":", 1)
+    hour = int(temp[0])
+    temp = temp[1].split(":", 1)
+    minute = int(temp[0])
+    temp = temp[1].split(".", 1)
+    second = int(temp[0])
+    return datetime.datetime(year,month,day,hour,minute,second)
+
+def url_to_datetimewithnanoseconds(url_date):
+    # 2020-08-15 16:00:14.366
+    temp = url_date.split("-", 1)
+    year = int(temp[0])
+    temp = temp[1].split("-", 1)
+    month = int(temp[0])
+    temp = temp[1].split(" ", 1)
+    day = int(temp[0])
+    temp = temp[1].split(":", 1)
+    hour = int(temp[0])
+    temp = temp[1].split(":", 1)
+    minute = int(temp[0])
+    temp = temp[1].split(".", 1)
+    second = int(temp[0])
+    return pytz.UTC.localize(DatetimeWithNanoseconds(year,month,day,hour,minute,second))
 
 
 if __name__ == "__main__":
@@ -94,13 +128,15 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task[0]["deadline"] = url_to_datetimewithnanoseconds(task[0]["deadline"])
+            task[1]["deadline"] = url_to_date(task[1]["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Open"]
             tasks.remove(task[0])
             tasks.append(task[1])
             doc_ref.update({
                 "Tasks_Open": tasks
             })
-            sort_open_tasks()
+            #sort_open_tasks()
             return jsonify(True)
         except Exception as e:
             print(e)
@@ -120,6 +156,8 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task[0]["deadline"] = url_to_datetimewithnanoseconds(task[0]["deadline"])
+            task[1]["deadline"] = url_to_date(task[1]["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Open"]
             tasks.remove(task[0])
             tasks.append(task[1])
@@ -127,7 +165,7 @@ if __name__ == "__main__":
             doc_ref.update({
                 "Tasks_Open": tasks
             })
-            sort_open_tasks()
+            #sort_open_tasks()
             return jsonify(True)
         except Exception as e:
             print(e)
@@ -147,6 +185,7 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task["deadline"] = url_to_datetimewithnanoseconds(task["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Done"]
             tasks.remove(task)
             doc_ref.update({
@@ -171,6 +210,7 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task["deadline"] = url_to_date(task["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Done"]
             tasks.append(task)
             doc_ref.update({
@@ -195,6 +235,7 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task["deadline"] = url_to_datetimewithnanoseconds(task["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Open"]
             tasks.remove(task)
             doc_ref.update({
@@ -219,6 +260,7 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
+            task["deadline"] = url_to_date(task["deadline"])
             tasks = doc_ref.get().to_dict()["Tasks_Open"]
             tasks.append(task)
             doc_ref.update({
@@ -266,7 +308,7 @@ if __name__ == "__main__":
             user = auth.verify_id_token(id_token)
             doc_ref = db.collection(u"Users").document(user["uid"])
             user_data = doc_ref.get().to_dict()
-            return jsonify(user_data)
+            return jsonify(json.dumps(user_data, default=str))
         except Exception as e:
             print(e)
             return jsonify(False)
@@ -318,7 +360,7 @@ if __name__ == "__main__":
 
 
 
-    #app.run() # for development
+    app.run() # for development
     #create_user()
 
     #app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080))) # for production

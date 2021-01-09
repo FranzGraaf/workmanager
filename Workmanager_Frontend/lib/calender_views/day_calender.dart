@@ -134,31 +134,35 @@ class Day_Calender_Painter extends CustomPainter {
   List<Map<String, dynamic>> _schedule_day_list;
 
   void _get_schedule_day() {
-    switch (_weekday) {
-      case Weekday.mo:
-        _schedule_day_list = global_user_data.monday_time;
-        break;
-      case Weekday.tu:
-        _schedule_day_list = global_user_data.tuesday_time;
-        break;
-      case Weekday.we:
-        _schedule_day_list = global_user_data.wednesday_time;
-        break;
-      case Weekday.th:
-        _schedule_day_list = global_user_data.thursday_time;
-        break;
-      case Weekday.fr:
-        _schedule_day_list = global_user_data.friday_time;
-        break;
-      case Weekday.sa:
-        _schedule_day_list = global_user_data.saturday_time;
-        break;
-      case Weekday.so:
-        _schedule_day_list = global_user_data.sunday_time;
-        break;
-      default:
-        _schedule_day_list = [];
-        break;
+    if (global_user_data != null) {
+      switch (_weekday) {
+        case Weekday.mo:
+          _schedule_day_list = global_user_data.monday_time;
+          break;
+        case Weekday.tu:
+          _schedule_day_list = global_user_data.tuesday_time;
+          break;
+        case Weekday.we:
+          _schedule_day_list = global_user_data.wednesday_time;
+          break;
+        case Weekday.th:
+          _schedule_day_list = global_user_data.thursday_time;
+          break;
+        case Weekday.fr:
+          _schedule_day_list = global_user_data.friday_time;
+          break;
+        case Weekday.sa:
+          _schedule_day_list = global_user_data.saturday_time;
+          break;
+        case Weekday.so:
+          _schedule_day_list = global_user_data.sunday_time;
+          break;
+        default:
+          _schedule_day_list = [];
+          break;
+      }
+    } else {
+      _schedule_day_list = [];
     }
   }
 

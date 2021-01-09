@@ -1,7 +1,9 @@
+import 'package:Workmanager_Frontend/global_stuff/backend_com.dart';
 import 'package:Workmanager_Frontend/global_stuff/global_variables.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_duration_picker.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_text_datepicker_v1.dart';
 import 'package:Workmanager_Frontend/global_stuff/own_widgets/own_textinput_v1.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -50,8 +52,8 @@ class _Add_Change_Task_PopupState extends State<Add_Change_Task_Popup> {
       _task["description"] = "";
     } else {
       _change = true;
-      _task = widget.task_change;
-      _task_old = widget.task_change;
+      _task = Map<String, dynamic>.from(widget.task_change);
+      _task_old = Map<String, dynamic>.from(widget.task_change);
     }
   }
 
@@ -147,34 +149,52 @@ class _Add_Change_Task_PopupState extends State<Add_Change_Task_Popup> {
                     height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       FloatingActionButton(
                         backgroundColor: Colors.greenAccent,
                         onPressed: () {
                           if (_check_input()) {
                             if (_change) {
-                              global_user_data.tasks_open[
-                                      global_user_data.tasks_open.indexWhere(
-                                          (element) => element == _task_old)] =
-                                  _task;
-                              // TODO: change Task in backend
+                              global_user_data.tasks_open[global_user_data
+                                  .tasks_open
+                                  .indexWhere((element) =>
+                                      mapEquals(element, _task_old))] = _task;
+                              Backend_Com().change_task_open(_task_old, _task);
                             } else {
                               global_user_data.tasks_open.add(_task);
-                              // TODO: add Task in backend
+                              Backend_Com().task_to_open(_task);
                             }
                             Navigator.of(context).pop(_task);
                           }
                         },
                         child: Icon(Icons.check),
                       ),
+                      SizedBox(
+                        width: 50,
+                      ),
                       FloatingActionButton(
-                        backgroundColor: Colors.redAccent,
+                        backgroundColor: Colors.orangeAccent,
                         onPressed: () {
                           Navigator.of(context).pop(null);
                         },
-                        child: Icon(Icons.delete),
-                      )
+                        child: Icon(Icons.cancel),
+                      ),
+                      SizedBox(
+                        width: _change ? 50 : 0,
+                      ),
+                      _change
+                          ? FloatingActionButton(
+                              backgroundColor: Colors.redAccent,
+                              onPressed: () {
+                                global_user_data.tasks_open.removeWhere(
+                                    (element) => element == _task_old);
+                                Backend_Com().delete_open_task(_task_old);
+                                Navigator.of(context).pop(null);
+                              },
+                              child: Icon(Icons.delete),
+                            )
+                          : Container(),
                     ],
                   ),
                 ],

@@ -50,11 +50,10 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  @override
-  void initState() {
-    super.initState();
+  void initialise() async {
+    print("INITIALISE");
     // sample data start --------------------------------------------------
-    global_user_data = DB_User(
+    /*global_user_data = DB_User(
       creation_time: DateTime.now(),
       tasks_open: [],
       tasks_done: [],
@@ -100,15 +99,22 @@ class _MainState extends State<Main> {
     ];
     global_user_data.tuesday_time = [
       {"start": DateTime(0, 0, 0, 8, 30), "end": DateTime(0, 0, 0, 12, 15)}
-    ];
+    ];*/
     // sample data end ----------------------------------------------------
     // check if user is logged in
     if (cookie.get("id_token") != null && cookie.get("id_token") != "") {
       global_usertype = Usertype.user;
       if (global_user_data == null) {
-        //TODO: get userdata via backend instead of creating sample data
+        global_user_data = await Backend_Com().get_user();
+        setState(() {});
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialise();
   }
 
   @override
@@ -120,7 +126,7 @@ class _MainState extends State<Main> {
       drawer: Main_Drawer(),
       body: Stack(
         children: [
-          Center(child: get_main_widget()),
+          Center(key: UniqueKey(), child: get_main_widget()),
           Header_Footer(),
         ],
       ),
