@@ -98,11 +98,10 @@ if __name__ == "__main__":
             doc_ref = db.collection(u"Users").document(user["uid"])
             task = json.loads(request.data)
             tasks = doc_ref.get().to_dict()["Tasks_Open"]
+            print(tasks)
             schedule = []
             for ind, element in enumerate(tasks):
-                m = element.split(": ")
-                z = m[3].split(", ")
-                x = (ind, z[0])
+                x = (ind, element["duration"])
                 schedule.append(x)
             def takeSecond(elem):
                 return elem[1]
@@ -315,7 +314,7 @@ if __name__ == "__main__":
 
     '''
     TODO: Create DB entry for a new user when registered 
-    HEADER: {"id_token": <string>} 
+    HEADER: {"id_token": <string>}  
     BODY: {} 
     RETURN: {True/False} 
     '''
